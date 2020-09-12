@@ -6,7 +6,7 @@
   "scripts": {
     "test": "ODE_ENV=test jest --watch",
     "dev": "next dev",
-    "build": "next build;",
+    "build": "next build",
     "start": "next start"
   },
   "repository": {
@@ -28,14 +28,10 @@
     "isomorphic-unfetch": "^3.0.0",
     "next": "9.5.3",
     "next-compose-plugins": "^2.2.0",
-    "nodemon": "^2.0.4",
     "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "react-key-handler": "^1.2.0-beta.3",
-    "react-redux": "^7.2.1",
     "react-spring": "8.0.27",
-    "redux": "^4.0.5",
-    "redux-devtools-extension": "^2.13.8",
-    "redux-observable": "^1.2.0",
     "styled-components": "^5.2.0"
   },
   "devDependencies": {
