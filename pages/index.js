@@ -1,5 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
+import fetch from 'isomorphic-unfetch'
+import useSWR from 'swr'
+
+const fetcher = (url) => fetch(url).then((res) => res.json())
 
 
 const Wrapper = styled.div`
@@ -9,16 +13,18 @@ const Wrapper = styled.div`
 `;
 
 
+export default function Index() {
 
-class HomePage extends React.Component {
+    const { data, error } = useSWR('/api/data', fetcher)
+  
+    if (error) return <div>Failed to load</div>
+    if (!data) return <div>Loading...</div>
 
-    render() {
-        return (
-            <Wrapper>
-                FPPG App
-            </Wrapper>
-        )
-    }
+    console.log(data)
+    return (
+        <Wrapper>
+            FPPG App
+        </Wrapper>
+    )
 }
 
-export default HomePage;
