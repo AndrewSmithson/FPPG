@@ -32,7 +32,10 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-key-handler": "^1.2.0-beta.3",
+    "react-redux": "^7.2.1",
     "react-spring": "8.0.27",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
     "styled-components": "^5.2.0",
     "swr": "^0.3.2"
   },

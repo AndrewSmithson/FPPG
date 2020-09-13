@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import fetch from 'isomorphic-unfetch'
 
+import { initializeStore } from '../lib/store'
 import { server } from '../config'
+
+import { setData } from '../_actions'
 
 
 const Wrapper = styled.div`
@@ -15,8 +18,8 @@ const Wrapper = styled.div`
 
 class HomePage extends React.Component {
 
+
     render() {
-        console.log(this.props)
         return (
             <Wrapper>
                 FPPG App
@@ -27,21 +30,26 @@ class HomePage extends React.Component {
 
 
 export async function getStaticProps () {
-    const data = await fetch(`${server}/api/data`)
+    const reduxStore = initializeStore()
+    const { dispatch } = reduxStore
+
+    await fetch(`${server}/api/data`)
         .then(response => {
             if (response.ok)
                 return response.json()
             else
                 throw JSON.parse(response.statusText)
         })
+        .then(data => {
+            dispatch(setData(data))
+        })
         .catch(err => {
             console.error(err)
         })
 
+
     return {
-        props: {
-            data
-        },
+        props: { initialReduxState: reduxStore.getState() },
         revalidate: 60
     }
 
