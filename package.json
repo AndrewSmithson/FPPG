@@ -4,7 +4,7 @@
   "description": "A React app that allows users to guess which player has higher FanDuel Points Per Game (FPPG).",
   "main": "index.js",
   "scripts": {
-    "test": "ODE_ENV=test jest --watch",
+    "test": "NODE_ENV=test jest --watch",
     "dev": "next dev",
     "build": "next build",
     "start": "next start"
@@ -39,7 +39,9 @@
     "babel-plugin-module-resolver": "^4.0.0",
     "casual": "^1.6.2",
     "enzyme-to-json": "^3.5.0",
-    "jest": "^26.4.2"
+    "jest": "^26.4.2",
+    "node-mocks-http": "^1.9.0",
+    "test-listen": "^1.1.0"
   },
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>/jest.setup.js",
