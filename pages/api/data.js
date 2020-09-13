@@ -1,4 +1,5 @@
 import { getJSON } from '../../lib/getJSON'
+import { reducePlayer, reduceFixture, reduceTeam } from '../../lib/reducers'
 
 
 // For the sake of simplicity this endpoint will only return a 200 of a 500
@@ -15,7 +16,41 @@ const getData = async (req, res) => {
 
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
-            res.end(JSON.stringify(response));
+
+            const reducedData = {
+                players: {},
+                fixtures: {},
+                teams: {}
+            }
+
+            response.players.forEach(player => {
+                let reduced = reducePlayer(player);
+                if(reduced)
+                    reducedData.players = {
+                        ...reducedData.players,
+                        ...reduced
+                    }
+            })
+
+            response.fixtures.forEach(fixture => {
+                let reduced = reduceFixture(fixture);
+                if(reduced)
+                    reducedData.fixtures = {
+                        ...reducedData.fixtures,
+                        ...reduced
+                    }
+            })
+
+            response.teams.forEach(team => {
+                let reduced = reduceTeam(team);
+                if(reduced)
+                    reducedData.teams = {
+                        ...reducedData.teams,
+                        ...reduced
+                    }
+            })
+
+            res.end(JSON.stringify(reducedData));
     
         })
         .catch(err => {
