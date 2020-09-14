@@ -19,7 +19,7 @@ class HomePage extends React.Component {
 }
 
 
-export async function getStaticProps () {
+export async function getServerSideProps () {
     const reduxStore = initializeStore()
     const { dispatch } = reduxStore
 
@@ -40,7 +40,6 @@ export async function getStaticProps () {
 
     return {
         props: { initialReduxState: reduxStore.getState() },
-        revalidate: 60
     }
 
 }
