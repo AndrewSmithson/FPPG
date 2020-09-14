@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import fetch from 'isomorphic-unfetch'
 
-import PointPicker from '../components/PointPicker'
+import PickerTrack from '../components/PickerTrack'
 
 import { initializeStore } from '../lib/store'
 import { server } from '../config'
@@ -20,11 +20,10 @@ const Wrapper = styled.div`
 
 class HomePage extends React.Component {
 
-
     render() {
         return (
             <Wrapper>
-                <PointPicker />
+                <PickerTrack />
             </Wrapper>
         )
     }
@@ -56,10 +55,6 @@ export async function getStaticProps () {
     }
 
 }
-
-
-
-
 
 
 

@@ -1,6 +1,9 @@
 import {
     DATA_SET,
-    GAME_MAKE_CHOICE
+    GAME_MAKE_CHOICE,
+    GAME_START,
+    GAME_END,
+    GAME_RESET,
 } from '../_constants';
 
 import { generateRounds } from '../lib/generateRounds'
@@ -10,7 +13,11 @@ export const initialState = {
     maxRounds: 10,
     currentRound: 0,
     roundsCorrect: 0,
-    rounds: {}
+    rounds: {},
+    flags: {
+        gameStarted: false,
+        gameComplete: false,
+    }
 
 }
 
@@ -28,16 +35,51 @@ export function reducer(state = initialState, action) {
             return {
                 ...state,
                 currentRound: state.currentRound + 1,
-                roundsCorrect: action.payload ? state.roundsCorrect + 1 : state.roundsCorrect,
+                roundsCorrect: action.payload.guess ? state.roundsCorrect + 1 : state.roundsCorrect,
                 rounds: {
                     ...state.rounds,
                     [state.currentRound]: {
                         ...state.rounds[state.currentRound],
-                        guess: action.payload
+                        selection: action.payload.selection,
+                        guess: action.payload.guess
                     }
+                },
+                flags: {
+                    ...state.flags,
+                    gameComplete: state.currentRound + 1 === state.maxRounds
                 }
             }
 
+        case GAME_START:
+            return {
+                ...state,
+                flags: {
+                    ...state.flags,
+                    gameStarted: true,
+                }
+            }
+
+        case GAME_END:
+            return {
+                ...state,
+                flags: {
+                    ...state.flags,
+                    gameComplete: true,
+                }
+            }
+
+        case GAME_RESET:
+            return {
+                ...state,
+                currentRound: 0,
+                roundsCorrect: 0,
+                rounds: generateRounds(Object.keys(action.payload), state.maxRounds),
+                flags: {
+                    ...state.flags,
+                    gameStarted: false,
+                    gameComplete: false,
+                }
+            }
 
         default: return state
     }
