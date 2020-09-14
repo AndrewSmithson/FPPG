@@ -20,6 +20,12 @@ describe('<PointPicker />', () => {
                     '002': {
                         fppg: 10
                     },
+                    '003': {
+                        fppg: 15
+                    },
+                    '004': {
+                        fppg: 20
+                    },
                 }
             },
             game: {
@@ -29,8 +35,18 @@ describe('<PointPicker />', () => {
                 rounds: {
                     0: {
                         options: ['001', '002'],
+                        selection: false,
+                        correct: false
+                    },
+                    1: {
+                        options: ['003', '004'],
+                        selection: false,
                         correct: false
                     }
+                },
+                flags: {
+                    gameStarted: false,
+                    gameComplete: false,
                 }
             },
         });
@@ -39,7 +55,7 @@ describe('<PointPicker />', () => {
     it('it renders and shows 2 options', () => {
         const wrapper = mount(
             <Provider store={store}>
-                <PointPicker/>
+                <PointPicker round={0} />
             </Provider>
         );
 
@@ -49,7 +65,11 @@ describe('<PointPicker />', () => {
     })
 
     // it('Selection an option dispatches an action', () => {
-    //     const wrapper = shallow(<PointPicker/>);
+    //     const wrapper = mount(
+    //         <Provider store={store}>
+    //             <PointPicker round={0} />
+    //         </Provider>
+    //     );
 
     // })
 
