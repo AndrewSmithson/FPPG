@@ -1,5 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
 
+import PlayerCard from './PlayerCard'
+
 import { makeChoice } from '../_actions'
 
 
@@ -32,23 +34,17 @@ const usePointPicker = (round) => {
 
 const PointPicker = (props) => {
     const { chooseOption, roundDetails, currentRound, flags } = usePointPicker(props.round);
-    // console.log(!flags.gameStarted )
-    // console.log(parseInt(props.round) !== parseInt(currentRound))
-    // console.log(!flags.gameStarted && parseInt(props.round) !== parseInt(currentRound))
+
     return (
         <>
             {roundDetails.options.map(option =>
-                <button
+                <PlayerCard
                     key={option}
+                    player={option}
                     disabled={!flags.gameStarted || parseInt(props.round) !== parseInt(currentRound)}
-                    style={{
-                        // backgroundColor: roundDetails.selection ? roundDetails.selection == option && roundDetails.guess ? 'green' : 'red' : ''
-                        backgroundColor: roundDetails.selection == option ? roundDetails.guess ? 'green' : 'red' : ''
-                    }}
-                    onClick={() => {chooseOption(option)}}
-                >
-                    {option}
-                </button>
+                    selected={roundDetails.selection == option ? roundDetails.guess ? 'correct' : 'incorrect' : 'no'}
+                    choose={chooseOption}
+                />
             )}
         </>
     )

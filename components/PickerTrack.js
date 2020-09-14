@@ -19,6 +19,7 @@ const Container = styled.div`
         "track";
     grid-template-rows: max-content 1fr;
     grid-template-columns: 1fr;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, .4);
 `
 
 const Explanation = styled.div`
@@ -26,12 +27,14 @@ const Explanation = styled.div`
     text-align: center;
     color: #FFF;
     padding: 1rem;
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, .4); */
 `
 
 const Track = styled.div`
     grid-area: track;
-    background-color: red ;
+    background-color: #FFF ;
     position: relative;
+    overflow: hidden;
 `
 
 const StartOverlay = styled.div`
@@ -57,10 +60,39 @@ const StartButton = styled(Button)`
     
 `;
 
+const Pairs = styled.div`
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 0;
+    transform: ${({maxRounds, currentRound}) => {
+        let cardHeight = 100 / maxRounds;
+        return `translateY(-${(cardHeight * currentRound) + (cardHeight / 2)}%)`
+    }};
+`
+
+const Pair = styled.div`
+    display: grid;
+    grid-template-areas:
+        ". left . right .";
+    grid-template-rows: 1fr;
+    grid-template-columns: 1rem 1fr 1rem 1fr 1rem;
+    width: 100%;
+
+    transform: scale(${props => props.active ? 1 : 0.8});
+
+    > *:first-child {
+        grid-area: left;
+    }
+    > *:last-child {
+        grid-area: right;
+    }
+`
+
 
 const usePickerTrack = () => {
     const players = useSelector(state => state.data.players);
-    const { rounds, flags } = useSelector(state => state.game);
+    const { rounds, flags, currentRound, maxRounds } = useSelector(state => state.game);
     const dispatch = useDispatch();
 
 
@@ -71,13 +103,15 @@ const usePickerTrack = () => {
         rounds,
         flags,
         start,
-        reset
+        reset,
+        currentRound,
+        maxRounds,
     }
 }
 
 
 const PickerTrack = (props) => {
-    const { rounds, flags, start, reset } = usePickerTrack();
+    const { rounds, flags, start, reset, currentRound, maxRounds, } = usePickerTrack();
 
 
 
@@ -85,7 +119,7 @@ const PickerTrack = (props) => {
         <Container>
             <Explanation>
                 <h1>Guess the Points</h1>
-                <p>You will be shown details about two players, your task is to decide which of the players has then higher FanDuel Points Per Game score.</p>
+                <p>You will be shown details about two players, your task is to decide which of the players has the higher FanDuel Points Per Game.</p>
             </Explanation>
             <Track>
                 {!flags.gameStarted && 
@@ -93,8 +127,13 @@ const PickerTrack = (props) => {
                         <StartButton onClick={start}>Start Game</StartButton>
                     </StartOverlay>
                 }
-
-                {Object.keys(rounds).map(round => <PointPicker key={round} round={round} />)}
+                <Pairs maxRounds={maxRounds} currentRound={currentRound}>
+                    {Object.keys(rounds).map(round => 
+                        <Pair active={currentRound == round} key={round}>
+                            <PointPicker round={round} />
+                        </Pair>
+                    )}
+                </Pairs>
                 {flags.gameStarted && flags.gameComplete && <button onClick={reset}>Restart Game</button>}
             </Track>
         </Container>
