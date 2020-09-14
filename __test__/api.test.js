@@ -9,7 +9,7 @@ import getData from '../pages/api/data'
 
 
 describe('getJSON', () => {
-    xit('The call is successful', () => {
+    it('The call is successful', () => {
         return getJSON()
             .then(data => {
                 expect(data.status).toBe(200)
@@ -17,7 +17,7 @@ describe('getJSON', () => {
     })
 
     const expectedKeys = [ '_meta', 'fixtures', 'players', 'teams'];
-    xit('The data is correct(ish)', () => {
+    it('The data is correct(ish)', () => {
         return getJSON()
             .then(data => data.json())
             .then(json => {
@@ -29,7 +29,7 @@ describe('getJSON', () => {
 
 
 describe("/api/data", () => {
-    xit("The call is successful", async () => {
+    it("The call is successful", async () => {
         let requestHandler = (req, res) => {
             return apiResolver(req, res, undefined, getData)
         }

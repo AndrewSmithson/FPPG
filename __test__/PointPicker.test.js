@@ -15,17 +15,24 @@ describe('<PointPicker />', () => {
             data: {
                 players: {
                     '001': {
-                        fppg: 5
+                        fppg: 5,
+                        team: "A"
                     },
                     '002': {
-                        fppg: 10
+                        fppg: 10,
+                        team: "B"
                     },
                     '003': {
-                        fppg: 15
+                        fppg: 15,
+                        team: "A"
                     },
                     '004': {
-                        fppg: 20
+                        fppg: 20,
+                        team: "B"
                     },
+                },
+                teams: {
+                    
                 }
             },
             game: {

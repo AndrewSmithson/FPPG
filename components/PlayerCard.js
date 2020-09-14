@@ -149,17 +149,16 @@ const PickerTrack = (props) => {
     return (
         <Card onClick={() => {if(!props.disabled) props.choose(props.player)}} selected={props.selected} disabled={props.disabled}>
             <Name><h3>{first_name} {last_name}</h3></Name>
-            <Thumb image={thumbnail.url}>
+            <Thumb image={thumbnail && thumbnail.url ? thumbnail.url: ''}>
                 {injury &&
                     <Injury>{injury.detail} injury</Injury>
                 } 
             </Thumb>
             <Details>
-                <Detail label={"Games Played"} value={played} />
-                <Detail label={"Position"} value={position} />
-                <Detail label={"Weekly Salary"} value={`$${salary}`} />
-                <Detail label={"Team"} value={team.full_name} />
-                {/* <Detail label={"N"} value={`$${salary}`} /> */}
+                {played && <Detail label={"Games Played"} value={played} />}
+                {position && <Detail label={"Position"} value={position} />}
+                {salary && <Detail label={"Weekly Salary"} value={`$${salary}`} />}
+                {team && team.full_name && <Detail label={"Team"} value={team.full_name} />}
             </Details>
         </Card>
     )

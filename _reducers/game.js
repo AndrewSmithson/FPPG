@@ -2,7 +2,6 @@ import {
     DATA_SET,
     GAME_MAKE_CHOICE,
     GAME_START,
-    GAME_END,
     GAME_RESET,
 } from '../_constants';
 
@@ -56,15 +55,6 @@ export function reducer(state = initialState, action) {
                 flags: {
                     ...state.flags,
                     gameStarted: true,
-                }
-            }
-
-        case GAME_END:
-            return {
-                ...state,
-                flags: {
-                    ...state.flags,
-                    gameComplete: true,
                 }
             }
 

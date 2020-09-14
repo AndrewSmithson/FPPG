@@ -2,7 +2,6 @@ import {
     DATA_SET,
     GAME_MAKE_CHOICE,
     GAME_START,
-    GAME_END,
     GAME_RESET,
 } from '../_constants'
 
@@ -17,13 +16,8 @@ export const makeChoice = payload => ({
     payload
 })
 
-
 export const startGame = () => ({
     type: GAME_START,
-})
-
-export const endGame = () => ({
-    type: GAME_END,
 })
 
 export const resetGame = payload => ({
