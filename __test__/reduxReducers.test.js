@@ -11,7 +11,7 @@ describe('game Reducer', () => {
     it('should return the initial state', () => {
         expect(gameReducer(undefined, {})).toEqual({
             rounds: 10,
-            roundsComplete: 0,
+            currentRound: 0,
             playersCompared: [],
         })
     })
@@ -30,10 +30,10 @@ describe('data Reducer', () => {
         })
     })
 
-    it('SET_DATA', () => {
+    it('DATA_SET', () => {
         expect(
             dataReducer(undefined, {
-                type: types.SET_DATA,
+                type: types.DATA_SET,
                 payload: {
                     players: {},
                     teams: {},
@@ -54,7 +54,7 @@ describe('data Reducer', () => {
                     fixtures: {789:'Charlie'}
                 },
                 {
-                    type: types.SET_DATA,
+                    type: types.DATA_SET,
                     payload: {
                         players: {321:'Xray'},
                         teams: {654:'Yankee'},

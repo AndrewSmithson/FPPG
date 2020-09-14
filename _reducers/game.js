@@ -8,7 +8,7 @@ import { generateRounds } from '../lib/generateRounds'
 
 export const initialState = {
     maxRounds: 10,
-    roundsComplete: 0,
+    currentRound: 0,
     roundsCorrect: 0,
     rounds: {}
 
@@ -27,8 +27,15 @@ export function reducer(state = initialState, action) {
         case GAME_MAKE_CHOICE:
             return {
                 ...state,
-                roundsComplete: state.roundsComplete++,
-                roundsCorrect: payload.correct,
+                currentRound: state.currentRound + 1,
+                roundsCorrect: action.payload ? state.roundsCorrect + 1 : state.roundsCorrect,
+                rounds: {
+                    ...state.rounds,
+                    [state.currentRound]: {
+                        ...state.rounds[state.currentRound],
+                        guess: action.payload
+                    }
+                }
             }
 
 

@@ -5,7 +5,7 @@ describe('Actions', () => {
   it('getData', () => {
     const payload = {players: {}, teams: {}, fixtures: {}};
     const expectedAction = {
-        type: types.SET_DATA,
+        type: types.DATA_SET,
         payload
     }
     expect(actions.setData(payload)).toEqual(expectedAction)
