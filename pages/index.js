@@ -10,21 +10,11 @@ import { server } from '../config'
 import { setData } from '../_actions'
 
 
-const Wrapper = styled.div`
-    width: 1000%;
-    max-width: 1200px;
-    margin: 0 auto;
-`;
-
-
-
 class HomePage extends React.Component {
 
     render() {
         return (
-            <Wrapper>
-                <PickerTrack />
-            </Wrapper>
+            <PickerTrack />
         )
     }
 }

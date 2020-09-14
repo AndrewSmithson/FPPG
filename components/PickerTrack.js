@@ -1,8 +1,61 @@
 import { useSelector, useDispatch } from 'react-redux'
+import styled from 'styled-components'
 
 import PointPicker from './PointPicker'
+import { Button } from './_styled/Button'
 
-import { startGame, resetGame, endGame } from '../_actions'
+import { startGame, resetGame, } from '../_actions'
+
+const Container = styled.div`
+    position: relative;
+    width: 1000%;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #1f375b;
+    height: 100vh;
+    display: grid;
+    grid-template-areas: 
+        "explanation"
+        "track";
+    grid-template-rows: max-content 1fr;
+    grid-template-columns: 1fr;
+`
+
+const Explanation = styled.div`
+    grid-area: explanation;
+    text-align: center;
+    color: #FFF;
+    padding: 1rem;
+`
+
+const Track = styled.div`
+    grid-area: track;
+    background-color: red ;
+    position: relative;
+`
+
+const StartOverlay = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+`;
+
+const StartButton = styled(Button)`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50%;
+    transform: translateX(-50%) translateY(-50%);
+
+    &:hover {
+        transform: translateX(-50%) translateY(-50%) scale(1.1);
+    }
+    
+`;
 
 
 const usePickerTrack = () => {
@@ -12,40 +65,39 @@ const usePickerTrack = () => {
 
 
     const start = () => dispatch(startGame())
-    const end = () => dispatch(endGame())
     const reset = () => dispatch(resetGame(players))
-
-    // let options = rounds[round].options
-
-    // const chooseOption = (chosen) => {
-    //     let other = options.filter(option => option != chosen)[0];
-
-    //     return dispatch(makeChoice(players[chosen].fppg > players[other].fppg))
-
-    // }
-
 
     return {
         rounds,
         flags,
         start,
-        end,
         reset
     }
 }
 
 
 const PickerTrack = (props) => {
-    const { rounds, flags, start, end, reset } = usePickerTrack();
+    const { rounds, flags, start, reset } = usePickerTrack();
 
 
 
     return (
-        <>
-            {!flags.gameStarted && <button onClick={start}>Start Game</button>}
-            {Object.keys(rounds).map(round => <PointPicker key={round} round={round} />)}
-            {flags.gameStarted && flags.gameComplete && <button onClick={reset}>Restart Game</button>}
-        </>
+        <Container>
+            <Explanation>
+                <h1>Guess the Points</h1>
+                <p>You will be shown details about two players, your task is to decide which of the players has then higher FanDuel Points Per Game score.</p>
+            </Explanation>
+            <Track>
+                {!flags.gameStarted && 
+                    <StartOverlay>
+                        <StartButton onClick={start}>Start Game</StartButton>
+                    </StartOverlay>
+                }
+
+                {Object.keys(rounds).map(round => <PointPicker key={round} round={round} />)}
+                {flags.gameStarted && flags.gameComplete && <button onClick={reset}>Restart Game</button>}
+            </Track>
+        </Container>
     )
 }
 
