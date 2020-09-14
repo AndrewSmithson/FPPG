@@ -1,4 +1,3 @@
-// import React from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 
 import { makeChoice } from '../_actions'
@@ -26,13 +25,13 @@ const usePointPicker = () => {
 }
 
 
-const PointPicker = () => {
+const PointPicker = (props) => {
     const { chooseOption, options } = usePointPicker();
 
     return (
-        <div>
-            {options.map(option => <button onClick={() => {chooseOption(option)}}>{option}</button>)}
-        </div>
+        <>
+            {options.map(option => <button key={option} onClick={() => {chooseOption(option)}}>{option}</button>)}
+        </>
     )
 }
 

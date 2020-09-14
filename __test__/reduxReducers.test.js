@@ -10,9 +10,10 @@ describe('game Reducer', () => {
 
     it('should return the initial state', () => {
         expect(gameReducer(undefined, {})).toEqual({
-            rounds: 10,
+            maxRounds: 10,
             currentRound: 0,
-            playersCompared: [],
+            roundsCorrect: 0,
+            rounds: {}
         })
     })
 
