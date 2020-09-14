@@ -1,28 +1,11 @@
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, } from 'react-redux'
 import styled from 'styled-components'
 
-import PointPicker from './PointPicker'
-import { Button } from './_styled/Button'
-
-import { startGame, resetGame, } from '../_actions'
 
 
 
 const Card = styled.div`
     display: grid;
-    /* grid-template-areas:
-        "name name name"
-        ". . ."
-        ". thumb ."
-        ". . ."
-        ". details .";
-    grid-template-columns: 1rem 1fr 1rem;
-    grid-template-rows:
-        auto
-        1rem
-        auto
-        1rem
-        auto; */
     grid-template-areas:
         "name"
         "thumb"
@@ -35,15 +18,24 @@ const Card = styled.div`
     width: 100%;
 
     
-    box-shadow: 0 4px 6px rgba(0, 0, 0, .4);
-
     opacity: ${props => props.disabled ? 0.5 : 1};
+    transition: all .5s ease;
     background-color: #1493ff;
     
     color: #FFF;
 
+    box-shadow: 0 4px 6px ${props => {
+        switch(props.selected) {
+            case 'correct':
+                return 'rgba(0, 255, 0, 0.4)'
+            case 'incorrect':
+                return 'rgba(255, 0, 0, 0.4)'
+            default:
+                return 'rgba(31, 55, 91, 0.4)'
+        }
+    }};
     
-    border: 4px solid ${props => {
+    border: 6px solid ${props => {
         switch(props.selected) {
             case 'correct':
                 return 'green'
@@ -53,6 +45,20 @@ const Card = styled.div`
                 return '#1f375b'
         }
     }};
+    border-radius: 6px;
+    box-sizing: border-box;
+    transform: scale(1);
+
+
+    ${props => {
+        if(!props.disabled)
+            return `
+                cursor: pointer;
+                &:hover {
+                    transform: scale(1.05);
+                }
+            `
+    }}
 `
 
 const Name = styled.div`
@@ -100,39 +106,60 @@ const DetailRow = styled.div`
 
 const DetailLabel = styled.div``
 
-const Detail = styled.div``
+const DetailValue = styled.div``
+
+
+const Injury = styled.div`
+    position: absolute;
+    bottom: 0;
+    left: 0%;
+    width: 100%;
+    padding: .25rem 0;
+    background-color: red;
+    text-align: center;
+    text-transform: uppercase;
+`
+
+
+const Detail = ({label, value}) => (
+    <DetailRow>
+        <DetailLabel>{label}</DetailLabel>
+        <DetailValue>{value}</DetailValue>
+    </DetailRow>
+)
 
 
 
-
-const usePlayerCard = (player) => {
-    const players = useSelector(state => state.data.players);
-
+const usePlayerCard = (playerId) => {
+    const {players, teams} = useSelector(state => state.data);
+    const player = players[playerId]
 
     return {
-        player: players[player]
+        player,
+        team: teams[player.team]
     }
 }
 
 
 const PickerTrack = (props) => {
-    const { player } = usePlayerCard(props.player);
+    const { player, team } = usePlayerCard(props.player);
 
-    const { thumbnail, first_name, last_name, played, position } = player;
+    const { thumbnail, first_name, last_name, played, position, injury, salary } = player;
 
     return (
-        <Card onClick={() => props.choose(props.player)} selected={props.selected} disabled={props.disabled}>
+        <Card onClick={() => {if(!props.disabled) props.choose(props.player)}} selected={props.selected} disabled={props.disabled}>
             <Name><h3>{first_name} {last_name}</h3></Name>
-            <Thumb image={thumbnail.url} />
+            <Thumb image={thumbnail.url}>
+                {injury &&
+                    <Injury>{injury.detail} injury</Injury>
+                } 
+            </Thumb>
             <Details>
-                <DetailRow>
-                    <DetailLabel>Games played</DetailLabel>
-                    <Detail>{played}</Detail>
-                </DetailRow>
-                <DetailRow>
-                    <DetailLabel>Position</DetailLabel>
-                    <Detail>{position}</Detail>
-                </DetailRow>
+                <Detail label={"Games Played"} value={played} />
+                <Detail label={"Position"} value={position} />
+                <Detail label={"Weekly Salary"} value={`$${salary}`} />
+                <Detail label={"Team"} value={team.full_name} />
+                {/* <Detail label={"N"} value={`$${salary}`} /> */}
             </Details>
         </Card>
     )

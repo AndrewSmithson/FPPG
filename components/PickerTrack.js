@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
+import { useSpring, animated, config as springConfig } from 'react-spring'
 import styled from 'styled-components'
 
 import PointPicker from './PointPicker'
@@ -27,7 +28,6 @@ const Explanation = styled.div`
     text-align: center;
     color: #FFF;
     padding: 1rem;
-    /* box-shadow: 0 4px 6px rgba(0, 0, 0, .4); */
 `
 
 const Track = styled.div`
@@ -37,39 +37,53 @@ const Track = styled.div`
     overflow: hidden;
 `
 
-const StartOverlay = styled.div`
+const Overlay = styled.div`
     position: absolute;
     top: 0;
     left: 0;
     z-index: 50;
     width: 100%;
     height: 100%;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    grid-template-areas:
+        "."
+        "message"
+        "button"
+        ".";
+    grid-template-rows:
+        1fr
+        min-content
+        min-content
+        1fr;
+    
+    grid-gap: 2rem;
     background-color: rgba(0,0,0,0.5);
 `;
 
-const StartButton = styled(Button)`
-    position: absolute;
-    top: 50%;
-    left: 50%;
+const OverlayButton = styled(Button)`
+    grid-area: button;
     width: 50%;
-    transform: translateX(-50%) translateY(-50%);
-
-    &:hover {
-        transform: translateX(-50%) translateY(-50%) scale(1.1);
-    }
-    
 `;
 
-const Pairs = styled.div`
+const Pairs = styled(animated.div)`
     position: absolute;
     width: 100%;
     top: 50%;
     left: 0;
-    transform: ${({maxRounds, currentRound}) => {
-        let cardHeight = 100 / maxRounds;
-        return `translateY(-${(cardHeight * currentRound) + (cardHeight / 2)}%)`
-    }};
 `
+
+const MovingPairs = (props) => {
+    const scroll = useSpring({
+        to: {
+            transform: ((100 / props.maxRounds) * props.currentRound) + ((100 / props.maxRounds) / 2)
+        },
+        consfig: springConfig.slow
+    })
+
+    return <Pairs style={{transform: scroll.transform.interpolate(v => `translateY(-${v}%)`)}}>{props.children}</Pairs>
+}
 
 const Pair = styled.div`
     display: grid;
@@ -80,6 +94,7 @@ const Pair = styled.div`
     width: 100%;
 
     transform: scale(${props => props.active ? 1 : 0.8});
+    transition: transform .5s ease;
 
     > *:first-child {
         grid-area: left;
@@ -89,10 +104,20 @@ const Pair = styled.div`
     }
 `
 
+const ScoreCard = styled.div`
+    grid-area: message;
+    width: 70%;
+    border-radius: 6px;
+    border: 2px solid #1493ff;
+    background-color: #FFF;
+    text-align: center;
+    padding: .5rem 1rem;
+`
+
 
 const usePickerTrack = () => {
     const players = useSelector(state => state.data.players);
-    const { rounds, flags, currentRound, maxRounds } = useSelector(state => state.game);
+    const { rounds, flags, currentRound, roundsCorrect, maxRounds } = useSelector(state => state.game);
     const dispatch = useDispatch();
 
 
@@ -105,13 +130,14 @@ const usePickerTrack = () => {
         start,
         reset,
         currentRound,
+        roundsCorrect,
         maxRounds,
     }
 }
 
 
 const PickerTrack = (props) => {
-    const { rounds, flags, start, reset, currentRound, maxRounds, } = usePickerTrack();
+    const { rounds, flags, start, reset, currentRound, roundsCorrect, maxRounds, } = usePickerTrack();
 
 
 
@@ -123,18 +149,26 @@ const PickerTrack = (props) => {
             </Explanation>
             <Track>
                 {!flags.gameStarted && 
-                    <StartOverlay>
-                        <StartButton onClick={start}>Start Game</StartButton>
-                    </StartOverlay>
+                    <Overlay>
+                        <OverlayButton onClick={start}>Start Game</OverlayButton>
+                    </Overlay>
                 }
-                <Pairs maxRounds={maxRounds} currentRound={currentRound}>
+                <MovingPairs maxRounds={maxRounds} currentRound={currentRound}>
                     {Object.keys(rounds).map(round => 
                         <Pair active={currentRound == round} key={round}>
                             <PointPicker round={round} />
                         </Pair>
                     )}
-                </Pairs>
-                {flags.gameStarted && flags.gameComplete && <button onClick={reset}>Restart Game</button>}
+                </MovingPairs>
+                {flags.gameStarted && flags.gameComplete && 
+                    <Overlay>
+                        <ScoreCard>
+                            <h2>Game Over</h2>
+                            <p>You managed to guess {roundsCorrect} out of {maxRounds} correctly.</p>
+                        </ScoreCard>
+                        <OverlayButton onClick={reset}>Play Again</OverlayButton>
+                    </Overlay>
+                }
             </Track>
         </Container>
     )

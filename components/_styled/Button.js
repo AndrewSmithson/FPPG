@@ -1,17 +1,11 @@
 import styled from 'styled-components'
 
 
-
-
-
-
-
 export const Button = styled.button`
     margin: 0;
     padding: 1.5em 0;
     border-radius: 6px;
     border: 2px solid #1493ff;
-    /* font-family: "Shentox-Light"; */
     font-size: .75rem;
     line-height: 1;
     text-align: center;
