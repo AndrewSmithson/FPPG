@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import fetch from 'isomorphic-unfetch'
 
+import PointPicker from '../components/PointPicker'
+
 import { initializeStore } from '../lib/store'
 import { server } from '../config'
 
@@ -22,7 +24,7 @@ class HomePage extends React.Component {
     render() {
         return (
             <Wrapper>
-                FPPG App
+                <PointPicker />
             </Wrapper>
         )
     }

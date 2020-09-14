@@ -1,1 +1,3 @@
-export const SET_DATA = 'SET_DATA';
+export const DATA_SET = 'DATA_SET';
+
+export const GAME_MAKE_CHOICE = 'GAME_MAKE_CHOICE';

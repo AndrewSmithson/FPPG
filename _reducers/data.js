@@ -1,4 +1,4 @@
-import { SET_DATA } from '../_constants';
+import { DATA_SET } from '../_constants';
 
 
 
@@ -11,7 +11,7 @@ export const initialState = {
 export function reducer(state = initialState, action) {
 
     switch (action.type) {
-        case SET_DATA:
+        case DATA_SET:
             return {
                 ...state,
                 ...action.payload,
